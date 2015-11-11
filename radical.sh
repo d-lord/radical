@@ -1,20 +1,35 @@
 #!/bin/bash
 # trigger me with a shortcut key
 
-f=$(mktemp)
-screencapture -i "$f"
-if [[ $? == 1 ]]; then
+PORT="22"
+SERVER="lord.geek.nz"
+KEY="$HOME/.ssh/sftp-key"
+USER="jailedsftp"
+REMOTEDIR="f"
+
+DIR=$(mktemp -d)
+pushd "$DIR"
+filename=$(date +%Y%m%d%M%S | openssl sha1 | head -c 5).png
+
+echo "cd $REMOTEDIR
+put $filename" > batch;
+
+screencapture -i "$filename";
+if [[ $? != 0 ]]; then
     # no file saved, or something
-    rm -rf "$f";
+    rm -rf "$DIR";
+    echo "Screen capture failed.";
     exit 1;
 fi
 # debug
-echo "$f";
-qlmanage -p "$f" > /dev/null 2>&1
+echo "$DIR/$filename";
+ls "$DIR";
+# qlmanage -p "$DIR/$filename" > /dev/null 2>&1
 
-# TODO: determine name
-# TODO: upload to server
-# TODO: copy URL to clipboard
+sftp -i "$KEY" -P "$PORT" -b batch "$USER"@"$SERVER";
+
+echo "$SERVER/$REMOTEDIR/$filename" | pbcopy
 
 # cleanup
-rm -rf "$f"
+popd;
+rm -rf "$DIR";
