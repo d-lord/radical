@@ -1,7 +1,14 @@
 #!/bin/bash
 # trigger me with a shortcut key
+# takes an argument for screencapture type
 
 PORT="22"
+MODE=$1
+if [[ $MODE != "i" && $MODE != "S" ]]; then
+    echo "Invalid mode (from Automator?)"
+    exit 1;
+fi
+
 SERVER="lord.geek.nz"
 KEY="$HOME/.ssh/sftp-key"
 USER="jailedsftp"
@@ -14,7 +21,7 @@ filename=$(date +%Y%m%d%M%S | openssl sha1 | head -c 5).png
 echo "cd $REMOTEDIR
 put $filename" > batch;
 
-screencapture -i "$filename";
+screencapture -$MODE "$filename" -t png;
 if [[ $? != 0 ]]; then
     # no file saved, or something
     rm -rf "$DIR";
