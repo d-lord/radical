@@ -21,7 +21,7 @@ filename=$(date +%Y%m%d%M%S | openssl sha1 | head -c 5).png
 echo "cd $REMOTEDIR
 put $filename" > batch;
 
-screencapture -$MODE "$filename" -t png;
+screencapture -"$MODE" "$filename" -t png;
 if [[ $? != 0 ]]; then
     # no file saved, or something
     rm -rf "$DIR";
