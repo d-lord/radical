@@ -12,5 +12,9 @@ fi
 echo "$f";
 qlmanage -p "$f" > /dev/null 2>&1
 
+# TODO: determine name
+# TODO: upload to server
+# TODO: copy URL to clipboard
+
 # cleanup
 rm -rf "$f"
