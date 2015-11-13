@@ -15,7 +15,7 @@ USER="jailedsftp"
 REMOTEDIR="f"
 
 DIR=$(mktemp -d)
-pushd "$DIR"
+pushd "$DIR" > /dev/null;
 filename=$(date +%Y%m%d%M%S | openssl sha1 | head -c 5).png
 
 echo "cd $REMOTEDIR
@@ -29,19 +29,26 @@ if [[ $? != 0 ]]; then
     exit 1;
 fi
 # debug
-echo "$DIR/$filename";
-ls "$DIR";
+# echo "$DIR/$filename";
+# ls "$DIR";
 # qlmanage -p "$DIR/$filename" > /dev/null 2>&1
 
-sftp -i "$KEY" -P "$PORT" -b batch "$USER"@"$SERVER";
+# redirect stderr to stdout and blackhole stdout
+# shellcheck disable=SC2069
+sftp -i "$KEY" -P "$PORT" -b batch "$USER"@"$SERVER" 2>&1 >/dev/null;
+if [[ $? != 0 ]]; then
+    # terrible happened and was printed to stdout
+    exit 1;
+fi
 
 echo "$SERVER/$REMOTEDIR/$filename" | pbcopy
+echo "$filename"
 
 # cleanup
-popd;
+popd > /dev/null;
 rm -rf "$DIR";
 
 # the killer feature that dropshare lacked:
 # preload it assuming we're behind a caching proxy eg squid
 # (also assuming the remote server sends useful expiry info)
-curl "$SERVER/$REMOTEDIR/$filename" > /dev/null
+curl "$SERVER/$REMOTEDIR/$filename" > /dev/null 2>&1
