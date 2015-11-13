@@ -15,7 +15,7 @@ KEY="$HOME/.ssh/sftp-key"
 USER="jailedsftp"
 REMOTEDIR="f"
 
-DIR=$(mktemp -d)
+DIR=$(mktemp -d) || echo "Unable to mktemp" && exit 1
 pushd "$DIR" > /dev/null;
 filename=$(date +%Y%m%d%M%S | openssl sha1 | head -c 5).png
 
