@@ -1,5 +1,6 @@
 #!/bin/bash
 # trigger me with a shortcut key
+# integrates with an Alfred workflow: first line of stdout will become a notification
 # takes an argument for screencapture type
 
 PORT="22"
