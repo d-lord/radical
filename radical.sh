@@ -42,7 +42,7 @@ if [[ $? != 0 ]]; then
     exit 1;
 fi
 
-echo "$SERVER/$REMOTEDIR/$filename" | pbcopy
+echo -n "$SERVER/$REMOTEDIR/$filename" | pbcopy
 echo "$filename"
 
 # cleanup
