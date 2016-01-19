@@ -14,6 +14,7 @@ SERVER="lord.geek.nz"
 KEY="$HOME/.ssh/sftp-key"
 USER="jailedsftp"
 REMOTEDIR="f"
+PROTOCOL="https"
 
 DIR=$(mktemp -d) || (echo "Unable to mktemp" && exit 1)
 pushd "$DIR" > /dev/null;
@@ -42,7 +43,7 @@ if [[ $? != 0 ]]; then
     exit 1;
 fi
 
-echo -n "$SERVER/$REMOTEDIR/$filename" | pbcopy
+echo -n "${PROTOCOL}://$SERVER/$REMOTEDIR/$filename" | pbcopy
 echo "$filename"
 
 # cleanup
