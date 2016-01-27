@@ -53,4 +53,4 @@ rm -rf "$DIR";
 # the killer feature that dropshare lacked:
 # preload it assuming we're behind a caching proxy eg squid
 # (also assuming the remote server sends useful expiry info)
-curl "$SERVER/$REMOTEDIR/$filename" > /dev/null 2>&1
+curl "${PROTOCOL}://${SERVER}/${REMOTEDIR}/${filename}" > /dev/null 2>&1
